@@ -8,9 +8,9 @@ using TestingQuestions.DAL.Interfaces;
 
 namespace TestingQuestions.DAL.Repositories
 {
-    public class PersonQuestionAnswerRepository : BaseRepository<PersonQuestionAnswer>, IPersonQuestionAnswerRepository
+    public class TestResultRepository : BaseRepository<TestResult>, ITestResultRepository
     {
-        public PersonQuestionAnswerRepository(AppDbContext dbContext) : base(dbContext)
+        public TestResultRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

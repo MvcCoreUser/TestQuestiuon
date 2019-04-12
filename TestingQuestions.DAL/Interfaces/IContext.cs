@@ -10,7 +10,8 @@ namespace TestingQuestions.DAL.Interfaces
     {
         IPersonRepository PersonRepository { get; }
         IQuestionRepository QuestionRepository { get;}
-        IPersonQuestionAnswerRepository PersonQuestionAnswerRepository{ get;}
+        ITestQuestionAnswerRepository TestQuestionAnswerRepository{ get;}
+        ITestResultRepository TestResultRepository { get; }
 
         Task<int> SaveAsync();
     }

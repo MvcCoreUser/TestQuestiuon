@@ -21,5 +21,11 @@ namespace TestingQuestions.DAL.Entities
         [StringLength(50)]
         public string Answer3 { get; set; }
         public int RightAnswerNum { get; set; }
+
+        public ICollection<TestQuestionAnswer> TestQuestionAnswers{ get; set; }
+        public Question()
+        {
+            TestQuestionAnswers = new List<TestQuestionAnswer>();
+        }
     }
 }

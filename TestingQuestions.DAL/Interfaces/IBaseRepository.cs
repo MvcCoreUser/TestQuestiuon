@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,5 +17,8 @@ namespace TestingQuestions.DAL.Interfaces
 
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> Get(Func<TEntity, bool> predicate);
+        IQueryable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
+        IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
+            params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

@@ -7,7 +7,8 @@ using TestingQuestions.DAL.Entities;
 
 namespace TestingQuestions.DAL.Interfaces
 {
-    public interface IPersonQuestionAnswerRepository: IBaseRepository<PersonQuestionAnswer>
+    public interface ITestResultRepository: IBaseRepository<TestResult>
     {
+
     }
 }

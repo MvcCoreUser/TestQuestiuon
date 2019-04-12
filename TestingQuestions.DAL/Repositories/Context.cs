@@ -17,12 +17,14 @@ namespace TestingQuestions.DAL.Repositories
             context = new AppDbContext(connectionName);
             PersonRepository = new PersonRepository(context);
             QuestionRepository = new QuestionRepository(context);
-            PersonQuestionAnswerRepository = new PersonQuestionAnswerRepository(context);
+            TestQuestionAnswerRepository = new TestQuestionAnswerRepository(context);
+            TestResultRepository = new TestResultRepository(context);
         }
 
         public IPersonRepository PersonRepository { get ;  }
         public IQuestionRepository QuestionRepository { get;  }
-        public IPersonQuestionAnswerRepository PersonQuestionAnswerRepository { get;  }
+        public ITestQuestionAnswerRepository TestQuestionAnswerRepository { get;  }
+        public ITestResultRepository TestResultRepository { get; }
 
         public virtual void Dispose(bool disposing)
         {
@@ -32,7 +34,8 @@ namespace TestingQuestions.DAL.Repositories
                 {
                     PersonRepository.Dispose();
                     QuestionRepository.Dispose();
-                    PersonQuestionAnswerRepository.Dispose();
+                    TestQuestionAnswerRepository.Dispose();
+                    TestResultRepository.Dispose();
                 }
                 this.disposed = true;
             }
