@@ -50,7 +50,7 @@ namespace TestingQuestions.DAL.Repositories
             return context.SaveChangesAsync();
         }
 
-        public IQueryable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
+        public IQueryable<TEntity> GetAllWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return Include(includeProperties);
         }

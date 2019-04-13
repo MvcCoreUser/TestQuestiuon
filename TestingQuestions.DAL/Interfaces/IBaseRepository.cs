@@ -17,7 +17,7 @@ namespace TestingQuestions.DAL.Interfaces
 
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> Get(Func<TEntity, bool> predicate);
-        IQueryable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
+        IQueryable<TEntity> GetAllWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
         IQueryable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
             params Expression<Func<TEntity, object>>[] includeProperties);
     }

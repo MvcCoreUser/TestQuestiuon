@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
+using OfficeOpenXml.Style;
 using TestingQuestions.BLL.Interfaces;
 using TestingQuestions.BLL.ViewModels;
 using TestingQuestions.DAL.Entities;
@@ -114,14 +117,54 @@ namespace TestingQuestions.BLL.Services
             return result;
         }
 
-        public async Task<byte[]> GetGeneralReport()
+        public byte[] GetGeneralReport()
         {
             ExcelPackage excelPackage = new ExcelPackage();
-            var workSheet = excelPackage.Workbook.Worksheets.Add("Лист 1");
+            var workSheet = excelPackage.Workbook.Worksheets.Add("Отчет по тестам");
 
             int testerCount = Database.TestResultRepository.GetAll().Count();
+            using (ExcelRange testerCountER = workSheet.Cells["A1:C1"])
+            {
+                testerCountER["A1"].Value = testerCount;
+                testerCountER.Merge = true;
+            }
+            ExcelRange tableHeader = workSheet.Cells["A2:C2"];
+            tableHeader.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            tableHeader.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            tableHeader.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            tableHeader["A2"].Value = "Вопрос";
+            tableHeader["B2"].Value = "Правильно";
+            tableHeader["C2"].Value = "Не правильно";
 
-            throw new NotImplementedException();
+            ExcelRange tableBody = workSheet.Cells["A3:C7"];
+            tableBody.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            tableBody.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            tableBody.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+            if (testerCount!=0)
+            {
+                int num = 0;
+                foreach (var question in Database.QuestionRepository.GetAllWithInclude(q => q.TestQuestionAnswers))
+                {
+                    num++;
+                    tableBody[$"A{num + 2}"].Value = num;
+                    int rightAnswerCount = question.TestQuestionAnswers.Count(qa => qa.AnswerNum.Equals(question.RightAnswerNum));
+                    tableBody[$"B{num + 2}"].Value = rightAnswerCount;
+                    int notRightAnswerCount = question.TestQuestionAnswers.Count(qa => !qa.AnswerNum.Equals(question.RightAnswerNum));
+                    tableBody[$"C{num + 2}"].Value = notRightAnswerCount;
+                }
+            }
+            ExcelBarChart chart = workSheet.Drawings.AddChart("barChart", eChartType.BarStacked) as ExcelBarChart;
+            chart.SetSize(300, 300);
+            chart.SetPosition(tableHeader.Start.Row, -2, tableHeader.End.Column+1, 10);
+            chart.Title.Text = workSheet.Name;
+
+            chart.Series.Add(ExcelRange.GetAddress(tableBody.Start.Row, tableBody.Start.Column + 1, tableBody.End.Row, tableBody.End.Column), 
+                                                        ExcelRange.GetAddress(tableBody.Start.Row, tableBody.Start.Column, tableBody.End.Row, tableBody.Start.Column));
+
+            tableHeader.Dispose();
+            tableBody.Dispose();
+            return excelPackage.GetAsByteArray();
         }
 
         public IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId)
@@ -167,7 +210,11 @@ namespace TestingQuestions.BLL.Services
                     Message = "Тест успешно стартовал",
                     Succeded = true
                 };
-                
+                int testId = Database.TestResultRepository.Get(t => t.StartedAt.Equals(startedAt) && t.PersonId.Equals(personId)).FirstOrDefault().Id;
+                foreach (var question in Database.QuestionRepository.GetAll().ToArray())
+                {
+                   await this.AddQuestionAnswer(testId, question.Id);
+                }   
             }
             else
             {

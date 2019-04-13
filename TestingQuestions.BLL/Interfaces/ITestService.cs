@@ -13,6 +13,6 @@ namespace TestingQuestions.BLL.Interfaces
         Task<OperationResult> AddQuestionAnswer(int testId, int questionId, int answerNum=0);
         Task<OperationResult> EndTest(int testId, int personId, DateTime finishedAt);
         IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId);
-        Task<byte[]> GetGeneralReport();
+        byte[] GetGeneralReport();
     }
 }
