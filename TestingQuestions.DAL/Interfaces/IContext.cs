@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestingQuestions.DAL.Interfaces
 {
-    public interface IContext: IDisposable
+    public interface IRepositoryContext: IDisposable
     {
         IPersonRepository PersonRepository { get; }
         IQuestionRepository QuestionRepository { get;}

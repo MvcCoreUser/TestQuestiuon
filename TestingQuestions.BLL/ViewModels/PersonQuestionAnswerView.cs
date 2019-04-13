@@ -8,6 +8,7 @@ namespace TestingQuestions.BLL.ViewModels
 {
     public class PersonQuestionAnswerView
     {
+        public int QuestionId { get; set; }
         public string QuestionDescription { get; set; }
         public string Answer1 { get; set; }
         public string Answer2 { get; set; }

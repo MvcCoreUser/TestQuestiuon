@@ -12,9 +12,9 @@ namespace TestingQuestions.BLL.Services
 {
     public class PersonService : IPersonService
     {
-        public IContext Database { get; set; }
+        public IRepositoryContext Database { get; set; }
 
-        public PersonService(IContext db)
+        public PersonService(IRepositoryContext db)
         {
             Database = db;
         }

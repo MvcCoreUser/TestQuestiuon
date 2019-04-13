@@ -7,12 +7,12 @@ using TestingQuestions.DAL.Interfaces;
 
 namespace TestingQuestions.DAL.Repositories
 {
-    public class Context: IContext
+    public class RepositoryContext: IRepositoryContext
     {
         private AppDbContext context;
         private bool disposed=false;
 
-        public Context(string connectionName)
+        public RepositoryContext(string connectionName)
         {
             context = new AppDbContext(connectionName);
             PersonRepository = new PersonRepository(context);

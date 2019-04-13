@@ -16,8 +16,8 @@ namespace TestingQuestions.BLL.Services
 {
     public class TestService : ITestService
     {
-        public IContext Database { get; set; }
-        public TestService(IContext db)
+        public IRepositoryContext Database { get; set; }
+        public TestService(IRepositoryContext db)
         {
             Database = db;
         }
@@ -225,6 +225,19 @@ namespace TestingQuestions.BLL.Services
                 };
             }
             return result;
+        }
+
+        public PersonQuestionAnswerView GetPersonQuestion(int questionId)
+        {
+            PersonQuestionAnswerView personQuestionAnswerView = new PersonQuestionAnswerView();
+            Question question = Database.QuestionRepository.FindById(questionId);
+            personQuestionAnswerView.QuestionId = questionId;
+            personQuestionAnswerView.QuestionDescription = question.Description;
+            personQuestionAnswerView.Answer1 = question.Answer1;
+            personQuestionAnswerView.Answer2 = question.Answer2;
+            personQuestionAnswerView.Answer3 = question.Answer3;
+
+            return personQuestionAnswerView;
         }
     }
 }
