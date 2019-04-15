@@ -10,5 +10,6 @@ namespace TestingQuestions.BLL.Interfaces
     public interface IPersonService: IDisposable
     {
         Task<OperationResult> SavePerson(PersonViewModel personViewModel);
+        int GetPersonIdByName(string name);
     }
 }

@@ -200,18 +200,20 @@ namespace TestingQuestions.BLL.Services
             {
                 PersonId = personId,
                 StartedAt = startedAt,
-                FinishedAt = default(DateTime)
+                FinishedAt= null
             };
             int recordsAffected= await Database.TestResultRepository.CreateAsync(testResult);
             if (recordsAffected>0)
             {
+                int testId = Database.TestResultRepository.Get(t => t.StartedAt.Equals(startedAt) && t.PersonId.Equals(personId)).FirstOrDefault().Id;
                 result = new OperationResult()
                 {
                     Message = "Тест успешно стартовал",
-                    Succeded = true
+                    Succeded = true,
+                    Tag = testId
                 };
-                int testId = Database.TestResultRepository.Get(t => t.StartedAt.Equals(startedAt) && t.PersonId.Equals(personId)).FirstOrDefault().Id;
-                foreach (var question in Database.QuestionRepository.GetAll().ToArray())
+                var questions = Database.QuestionRepository.GetAll().ToArray();
+                foreach (var question in questions)
                 {
                    await this.AddQuestionAnswer(testId, question.Id);
                 }   
@@ -227,17 +229,27 @@ namespace TestingQuestions.BLL.Services
             return result;
         }
 
-        public PersonQuestionAnswerView GetPersonQuestion(int questionId)
+        public PersonQuestionAnswerView GetNextQuestion(int curQuestionId)
         {
-            PersonQuestionAnswerView personQuestionAnswerView = new PersonQuestionAnswerView();
-            Question question = Database.QuestionRepository.FindById(questionId);
-            personQuestionAnswerView.QuestionId = questionId;
-            personQuestionAnswerView.QuestionDescription = question.Description;
-            personQuestionAnswerView.Answer1 = question.Answer1;
-            personQuestionAnswerView.Answer2 = question.Answer2;
-            personQuestionAnswerView.Answer3 = question.Answer3;
+            Question question = new Question();
+            question = Database.QuestionRepository.Get(q => q.Id > curQuestionId).OrderBy(p => p.Id).FirstOrDefault();
+            PersonQuestionAnswerView personQuestionAnswerView = PersonQuestionAnswerView.FromQuestion(question);
 
             return personQuestionAnswerView;
         }
+
+        public PersonQuestionAnswerView GetPrevQuestion(int curQuestionId)
+        {
+            Question question = new Question();
+            question = Database.QuestionRepository.GetAll().Where(q => q.Id < curQuestionId).OrderBy(p=>p.Id).LastOrDefault();
+            PersonQuestionAnswerView personQuestionAnswerView = PersonQuestionAnswerView.FromQuestion(question);
+            return personQuestionAnswerView;
+        }
+
+        public bool IsLastQuestion(int questionId)
+         => questionId.Equals(Database.QuestionRepository.GetAll().Max(q => q.Id));
+
+        public bool IsFirstQuestion(int questionId)
+        => questionId.Equals(Database.QuestionRepository.GetAll().Min(q => q.Id));
     }
 }

@@ -31,7 +31,8 @@ namespace TestingQuestions.BLL.Services
                     result = new OperationResult()
                     {
                         Message = "Тестируемый успешно зарегистрирован",
-                        Succeded = true
+                        Succeded = true,
+                        Tag=person.Id
                     };
                 }
                 else
@@ -50,10 +51,12 @@ namespace TestingQuestions.BLL.Services
                 int recordsAffected= await Database.PersonRepository.CreateAsync(person);
                 if (recordsAffected>0)
                 {
+                    int personId = this.GetPersonIdByName(personViewModel.Name);
                     result = new OperationResult()
                     {
                         Message = "Тестируемый успешно зарегистрирован",
-                        Succeded = true
+                        Succeded = true,
+                        Tag = personId
                     };
                 }
                 else
@@ -73,6 +76,16 @@ namespace TestingQuestions.BLL.Services
         public void Dispose()
         {
             Database.Dispose();
+        }
+
+        public int GetPersonIdByName(string name)
+        {
+           Person person= Database.PersonRepository.Get(p => p.Name.Equals(name, StringComparison.Ordinal)).FirstOrDefault();
+            if (person==null)
+            {
+                throw new Exception($"Тестируемый с именем {name} не найден");
+            }
+            return person.Id;
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿@model TestingQuestions.BLL.ViewModels.PersonViewModel
+@{
+    ViewBag.Title = "RegisterPerson";
+}
+
+@using (Html.BeginForm("RegisterPerson", "Home", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m=>m.Name, new {@class = "control-label"})
+        @Html.TextBoxFor(m=>m.Name, new { @class="form-control"})
+    </div>
+    <input type="submit" class="btn btn-default" value="Сохранить" />
+}
+

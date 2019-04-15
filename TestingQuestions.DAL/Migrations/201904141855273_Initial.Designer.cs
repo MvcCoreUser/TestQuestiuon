@@ -13,7 +13,7 @@ namespace TestingQuestions.DAL.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201904111751424_Initial"; }
+            get { return "201904141855273_Initial"; }
         }
         
         string IMigrationMetadata.Source

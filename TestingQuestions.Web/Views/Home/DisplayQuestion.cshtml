@@ -1,0 +1,75 @@
+﻿@model TestingQuestions.BLL.ViewModels.PersonQuestionAnswerView
+@{
+    ViewBag.Title = "DisplayQuestion";
+    string btnCaption = Model.IsLast ? "Завершить тестирование" : "Далее";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        var answerNum = @Model.AnswerNum;
+        $(document).ready(function () {
+            $('label').click(function (e) {
+                var radioBtn = $(this).children('input[type=radio]').first();
+                if (radioBtn) {
+                    answerNum = radioBtn.val();
+                }
+            });
+            $('input[type=radio]').each(function (index, element) {
+                // element == this
+                if ($(element).val() == answerNum) {
+                    $(element).prop('checked', true);
+                }
+
+            });
+            $('#btnNext').click(function (e) {
+                var personQuestionAnswer = {
+                    QuestionId: '@Model.QuestionId',
+                    AnswerNum: answerNum
+                };
+                if (personQuestionAnswer.AnswerNum!=0) {
+                    $.ajax({
+                        type: 'POST',
+                        async: true,
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        url: '@Url.Action("SaveQuestionAsnwer", "Home")',
+                        data: JSON.stringify(personQuestionAnswer)
+                    }) 
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            //window.alert(jqXHR.statusText +'\n'+ errorThrown);
+                        });
+                    window.open('@Url.Action("DisplayNextQuestion", "Home", new { curQuestionId=Model.QuestionId})', '_self');
+                }
+                
+            });
+            
+        });
+    </script>
+    }
+
+<h5>@Html.LabelFor(m => m.QuestionDescription):</h5>
+<p>@Html.DisplayFor(m => m.QuestionDescription)</p>
+
+
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+            <input type="radio" name="questions" value="1"/>
+            @Html.DisplayFor(m => m.Answer1)
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="questions" value="2"/>
+            @Html.DisplayFor(m => m.Answer2)
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="questions" value="3"/>
+            @Html.DisplayFor(m => m.Answer3)
+        </label>
+    </div>
+    @if (!Model.IsFirst)
+    {
+        @Html.ActionLink("Назад", "DisplayPrevQuestion", "Home", new { curQuestionId = Model.QuestionId }, new { @class = "btn btn-warning" })
+    }
+    <button type="button" id="btnNext" class="btn btn-primary">@btnCaption</button>
+
+

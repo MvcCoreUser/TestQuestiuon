@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TestingQuestions.BLL.ViewModels.PersonQuestionAnswerView>
+@{
+    ViewBag.Title = "Результаты теста";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table table-striped table-bordered table-condensed">
+    <tr>
+        <th>Вопрос</th>
+        <th>Вариант 1</th>
+        <th>Вариант 2</th>
+        <th>Вариант 3</th>
+        <th>Ваш вариант ответа</th>
+        <th>Правильный вариант ответа</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.QuestionDescription</td>
+            <td>@item.Answer1</td>
+            <td>@item.Answer2</td>
+            <td>@item.Answer3</td>
+            <td>@item.AnswerNum</td>
+            <td>@item.RightAnswerNum</td>
+        </tr>
+    }
+</table>

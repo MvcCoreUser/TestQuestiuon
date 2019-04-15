@@ -64,6 +64,7 @@ namespace TestingQuestions.DAL.Migrations
                 },
             };
             questions.ForEach(q =>  context.Questions.AddOrUpdate(q));
+            context.SaveChanges();
         }
     }
 }

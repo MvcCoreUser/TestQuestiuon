@@ -7,13 +7,13 @@ namespace TestingQuestions.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class ChangeTestResult2 : IMigrationMetadata
+    public sealed partial class fix2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ChangeTestResult2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(fix2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904121100444_ChangeTestResult2"; }
+            get { return "201904141907188_fix2"; }
         }
         
         string IMigrationMetadata.Source

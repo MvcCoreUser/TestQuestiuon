@@ -13,7 +13,10 @@ namespace TestingQuestions.BLL.Interfaces
         Task<OperationResult> AddQuestionAnswer(int testId, int questionId, int answerNum=0);
         Task<OperationResult> EndTest(int testId, int personId, DateTime finishedAt);
         IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId);
-        PersonQuestionAnswerView GetPersonQuestion(int questionId);
+        PersonQuestionAnswerView GetNextQuestion(int curQuestionId);
+        PersonQuestionAnswerView GetPrevQuestion(int curQuestionId);
+        bool IsLastQuestion(int questionId);
+        bool IsFirstQuestion(int questionId);
         byte[] GetGeneralReport();
     }
 }

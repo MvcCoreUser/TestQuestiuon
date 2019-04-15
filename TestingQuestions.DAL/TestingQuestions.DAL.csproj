@@ -59,45 +59,17 @@
     <Compile Include="Interfaces\IPersonRepository.cs" />
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\ITestResultRepository.cs" />
-    <Compile Include="Migrations\201904111751424_Initial.cs" />
-    <Compile Include="Migrations\201904111751424_Initial.Designer.cs">
-      <DependentUpon>201904111751424_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201904141855273_Initial.cs" />
+    <Compile Include="Migrations\201904141855273_Initial.Designer.cs">
+      <DependentUpon>201904141855273_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904111818328_AddPersonUniqueIndex.cs" />
-    <Compile Include="Migrations\201904111818328_AddPersonUniqueIndex.Designer.cs">
-      <DependentUpon>201904111818328_AddPersonUniqueIndex.cs</DependentUpon>
+    <Compile Include="Migrations\201904141905459_fix1.cs" />
+    <Compile Include="Migrations\201904141905459_fix1.Designer.cs">
+      <DependentUpon>201904141905459_fix1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904111831511_AddStringLength.cs" />
-    <Compile Include="Migrations\201904111831511_AddStringLength.Designer.cs">
-      <DependentUpon>201904111831511_AddStringLength.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904111932043_AddPersonAnswerIndex.cs" />
-    <Compile Include="Migrations\201904111932043_AddPersonAnswerIndex.Designer.cs">
-      <DependentUpon>201904111932043_AddPersonAnswerIndex.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904120830329_AddTestResult.cs" />
-    <Compile Include="Migrations\201904120830329_AddTestResult.Designer.cs">
-      <DependentUpon>201904120830329_AddTestResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904121030202_ChangeTestResult.cs" />
-    <Compile Include="Migrations\201904121030202_ChangeTestResult.Designer.cs">
-      <DependentUpon>201904121030202_ChangeTestResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904121034283_ChangeTestRepo.cs" />
-    <Compile Include="Migrations\201904121034283_ChangeTestRepo.Designer.cs">
-      <DependentUpon>201904121034283_ChangeTestRepo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904121047272_ChangeTestResult1.cs" />
-    <Compile Include="Migrations\201904121047272_ChangeTestResult1.Designer.cs">
-      <DependentUpon>201904121047272_ChangeTestResult1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904121100444_ChangeTestResult2.cs" />
-    <Compile Include="Migrations\201904121100444_ChangeTestResult2.Designer.cs">
-      <DependentUpon>201904121100444_ChangeTestResult2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904121636151_FixQuestion.cs" />
-    <Compile Include="Migrations\201904121636151_FixQuestion.Designer.cs">
-      <DependentUpon>201904121636151_FixQuestion.cs</DependentUpon>
+    <Compile Include="Migrations\201904141907188_fix2.cs" />
+    <Compile Include="Migrations\201904141907188_fix2.Designer.cs">
+      <DependentUpon>201904141907188_fix2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,42 +80,20 @@
     <Compile Include="Repositories\QuestionRepository.cs" />
     <Compile Include="Repositories\TestResultRepository.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904141855273_Initial.resx">
+      <DependentUpon>201904141855273_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904141905459_fix1.resx">
+      <DependentUpon>201904141905459_fix1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904141907188_fix2.resx">
+      <DependentUpon>201904141907188_fix2.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904111751424_Initial.resx">
-      <DependentUpon>201904111751424_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904111818328_AddPersonUniqueIndex.resx">
-      <DependentUpon>201904111818328_AddPersonUniqueIndex.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904111831511_AddStringLength.resx">
-      <DependentUpon>201904111831511_AddStringLength.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904111932043_AddPersonAnswerIndex.resx">
-      <DependentUpon>201904111932043_AddPersonAnswerIndex.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904120830329_AddTestResult.resx">
-      <DependentUpon>201904120830329_AddTestResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904121030202_ChangeTestResult.resx">
-      <DependentUpon>201904121030202_ChangeTestResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904121034283_ChangeTestRepo.resx">
-      <DependentUpon>201904121034283_ChangeTestRepo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904121047272_ChangeTestResult1.resx">
-      <DependentUpon>201904121047272_ChangeTestResult1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904121100444_ChangeTestResult2.resx">
-      <DependentUpon>201904121100444_ChangeTestResult2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904121636151_FixQuestion.resx">
-      <DependentUpon>201904121636151_FixQuestion.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
