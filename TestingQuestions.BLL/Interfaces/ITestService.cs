@@ -11,12 +11,15 @@ namespace TestingQuestions.BLL.Interfaces
     {
         Task<OperationResult> StartTest(int personId, DateTime startedAt);
         Task<OperationResult> AddQuestionAnswer(int testId, int questionId, int answerNum=0);
+        int? GetAnswerNum(int testId, int questionId);
         Task<OperationResult> EndTest(int testId, int personId, DateTime finishedAt);
-        IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId);
+        IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId, int testId);
         PersonQuestionAnswerView GetNextQuestion(int curQuestionId);
         PersonQuestionAnswerView GetPrevQuestion(int curQuestionId);
+        PersonQuestionAnswerView GetQuestionByNum(int num);
         bool IsLastQuestion(int questionId);
         bool IsFirstQuestion(int questionId);
         byte[] GetGeneralReport();
+        int GetQuestionCount();
     }
 }

@@ -1,7 +1,16 @@
 ﻿@model TestingQuestions.BLL.ViewModels.PersonQuestionAnswerView
 @{
-    ViewBag.Title = "DisplayQuestion";
+    ViewBag.Title = "Вопрос";
     string btnCaption = Model.IsLast ? "Завершить тестирование" : "Далее";
+    string[] checkedValues = new string[3];
+    string[] pressedBtns = new string[3];
+    if (Model.AnswerNum!=0)
+    {
+        checkedValues[Model.AnswerNum - 1] = "checked";
+        pressedBtns[Model.AnswerNum - 1] = "active";
+    }
+    int curNum = int.Parse(Request.QueryString["num"]);
+
 }
 
 @section scripts{
@@ -16,10 +25,10 @@
             });
             $('input[type=radio]').each(function (index, element) {
                 // element == this
-                if ($(element).val() == answerNum) {
-                    $(element).prop('checked', true);
+                if ($(element).prop('checked')) {
+                    $(element).parent('label').addClass('active');
                 }
-
+                
             });
             $('#btnNext').click(function (e) {
                 var personQuestionAnswer = {
@@ -35,41 +44,65 @@
                         dataType: 'json',
                         url: '@Url.Action("SaveQuestionAsnwer", "Home")',
                         data: JSON.stringify(personQuestionAnswer)
-                    }) 
-                        .fail(function (jqXHR, textStatus, errorThrown) {
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
                             //window.alert(jqXHR.statusText +'\n'+ errorThrown);
                         });
-                    window.open('@Url.Action("DisplayNextQuestion", "Home", new { curQuestionId=Model.QuestionId})', '_self');
+
                 }
-                
+                 window.open('@Url.Action("DisplayQuestionByNum", "Home", new { num=curNum+1})', '_self');
+
             });
-            
+
         });
     </script>
-    }
-
-<h5>@Html.LabelFor(m => m.QuestionDescription):</h5>
-<p>@Html.DisplayFor(m => m.QuestionDescription)</p>
+}
 
 
-    <div class="btn-group" data-toggle="buttons">
-        <label class="btn btn-default">
-            <input type="radio" name="questions" value="1"/>
-            @Html.DisplayFor(m => m.Answer1)
-        </label>
-        <label class="btn btn-default">
-            <input type="radio" name="questions" value="2"/>
-            @Html.DisplayFor(m => m.Answer2)
-        </label>
-        <label class="btn btn-default">
-            <input type="radio" name="questions" value="3"/>
-            @Html.DisplayFor(m => m.Answer3)
-        </label>
+<div class="panel panel-default">
+    <div class="panel-heading">@Html.LabelFor(m => m.QuestionDescription):<br />@Html.DisplayFor(m => m.QuestionDescription)</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="btn-group btn-group-vertical" data-toggle="buttons">
+                    <label class="btn btn-default @pressedBtns[0]">
+                        <input type="radio" name="questions" value="1" @checkedValues[0] />
+                        1) @Html.DisplayFor(m => m.Answer1)
+                    </label>
+                    <label class="btn btn-default @pressedBtns[1]">
+                        <input type="radio" name="questions" value="2" @checkedValues[1] />
+                        2) @Html.DisplayFor(m => m.Answer2)
+                    </label>
+                    <label class="btn btn-default @pressedBtns[2]">
+                        <input type="radio" name="questions" value="3" @checkedValues[2] />
+                        3) @Html.DisplayFor(m => m.Answer3)
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                @using (Html.BeginForm("DisplayQuestionByNum", "Home", FormMethod.Get))
+                {
+                    <label for="num" class="control-label">Перейти к вопросу:</label>
+                    <select id="num" name="num" onchange="this.form.submit()" class="form-control">
+                        @for (int i = 1; i <= ViewBag.qCount; i++)
+                        {
+                            string @selected = i.Equals(curNum) ? "selected" : string.Empty;
+                            <option value="@i" @selected>@i</option>
+                        }
+                    </select>
+                }
+            </div>
+        </div>
+        
     </div>
-    @if (!Model.IsFirst)
-    {
-        @Html.ActionLink("Назад", "DisplayPrevQuestion", "Home", new { curQuestionId = Model.QuestionId }, new { @class = "btn btn-warning" })
-    }
-    <button type="button" id="btnNext" class="btn btn-primary">@btnCaption</button>
+    <div class="panel-footer">
+        @if (!Model.IsFirst)
+        {
+            @Html.ActionLink("Назад", "DisplayQuestionByNum", "Home", new { num = curNum - 1 }, new { @class = "btn btn-warning" })
+        }
+        <button type="button" id="btnNext" class="btn btn-primary">@btnCaption</button>
+    </div>
+</div>
+
+
 
 

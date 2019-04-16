@@ -1,6 +1,6 @@
 ﻿@model TestingQuestions.BLL.ViewModels.PersonViewModel
 @{
-    ViewBag.Title = "RegisterPerson";
+    ViewBag.Title = "регистрация фамилии И.О. тестируемого";
 }
 
 @using (Html.BeginForm("RegisterPerson", "Home", FormMethod.Post))
@@ -9,6 +9,6 @@
         @Html.LabelFor(m=>m.Name, new {@class = "control-label"})
         @Html.TextBoxFor(m=>m.Name, new { @class="form-control"})
     </div>
-    <input type="submit" class="btn btn-default" value="Сохранить" />
+    <input type="submit" class="btn btn-primary" value="Регистрация" />
 }
 

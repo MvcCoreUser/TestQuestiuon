@@ -22,3 +22,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+label.btn{
+    min-width: 200px !important;
+    text-align:left !important;
+}

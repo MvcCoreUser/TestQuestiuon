@@ -21,7 +21,7 @@
             <td>@item.Answer1</td>
             <td>@item.Answer2</td>
             <td>@item.Answer3</td>
-            <td>@item.AnswerNum</td>
+            <td>@(item.AnswerNum.Equals(0)?"Нет ответа":item.AnswerNum.ToString())</td>
             <td>@item.RightAnswerNum</td>
         </tr>
     }

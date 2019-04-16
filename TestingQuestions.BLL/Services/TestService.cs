@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -125,8 +126,8 @@ namespace TestingQuestions.BLL.Services
             int testerCount = Database.TestResultRepository.GetAll().Count();
             using (ExcelRange testerCountER = workSheet.Cells["A1:C1"])
             {
-                testerCountER["A1"].Value = testerCount;
-                testerCountER.Merge = true;
+                testerCountER["A1"].Value = $"Кол-во тестируемых: {testerCount}";
+                workSheet.Cells["A1:C1"].Merge = true;
             }
             ExcelRange tableHeader = workSheet.Cells["A2:C2"];
             tableHeader.Style.Border.Left.Style = ExcelBorderStyle.Thin;
@@ -134,7 +135,7 @@ namespace TestingQuestions.BLL.Services
             tableHeader.Style.Border.BorderAround(ExcelBorderStyle.Thin);
             tableHeader["A2"].Value = "Вопрос";
             tableHeader["B2"].Value = "Правильно";
-            tableHeader["C2"].Value = "Не правильно";
+            tableHeader["C2"].Value = "Неправильно";
 
             ExcelRange tableBody = workSheet.Cells["A3:C7"];
             tableBody.Style.Border.Left.Style = ExcelBorderStyle.Thin;
@@ -154,23 +155,33 @@ namespace TestingQuestions.BLL.Services
                     tableBody[$"C{num + 2}"].Value = notRightAnswerCount;
                 }
             }
-            ExcelBarChart chart = workSheet.Drawings.AddChart("barChart", eChartType.BarStacked) as ExcelBarChart;
-            chart.SetSize(300, 300);
-            chart.SetPosition(tableHeader.Start.Row, -2, tableHeader.End.Column+1, 10);
-            chart.Title.Text = workSheet.Name;
+            workSheet.Column(tableBody.End.Column - 1).AutoFit();
+            workSheet.Column(tableBody.End.Column).AutoFit();
 
-            chart.Series.Add(ExcelRange.GetAddress(tableBody.Start.Row, tableBody.Start.Column + 1, tableBody.End.Row, tableBody.End.Column), 
-                                                        ExcelRange.GetAddress(tableBody.Start.Row, tableBody.Start.Column, tableBody.End.Row, tableBody.Start.Column));
+            ExcelBarChart chart = workSheet.Drawings.AddChart("barChart", eChartType.ColumnStacked) as ExcelBarChart;
+            chart.SetSize(500, 300);
+            chart.SetPosition(tableHeader.Start.Row, -2, tableHeader.End.Column, 10);
+            chart.Title.Text = workSheet.Name;
+            string serie = "B3:B7";
+            string xSerie = "A3:A7";
+            var serie1= chart.Series.Add(serie, xSerie);
+            serie1.Header = "Правильно";
+            serie1.Fill.Color = Color.FromArgb(79, 129, 189);
+            serie = "C3:C7";
+            xSerie = "A3:A7";
+            var serie2= chart.Series.Add(serie, xSerie);
+            serie2.Header = "Неправильно";
+            serie2.Fill.Color = Color.FromArgb(192, 80, 77);
 
             tableHeader.Dispose();
             tableBody.Dispose();
             return excelPackage.GetAsByteArray();
         }
 
-        public IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId)
+        public IEnumerable<PersonQuestionAnswerView> GetPersonTestResult(int personId, int testId)
         {
             List<PersonQuestionAnswerView> res = new List<PersonQuestionAnswerView>();
-            TestResult testResult = Database.TestResultRepository.FindById(personId);
+            TestResult testResult = Database.TestResultRepository.Get(t=>t.PersonId.Equals(personId) && t.Id.Equals(testId)).FirstOrDefault();
             if (testResult!=null)
             {
                 IEnumerable<TestQuestionAnswer> testQuestionAnswers = Database.TestQuestionAnswerRepository
@@ -241,7 +252,7 @@ namespace TestingQuestions.BLL.Services
         public PersonQuestionAnswerView GetPrevQuestion(int curQuestionId)
         {
             Question question = new Question();
-            question = Database.QuestionRepository.GetAll().Where(q => q.Id < curQuestionId).OrderBy(p=>p.Id).LastOrDefault();
+            question = Database.QuestionRepository.Get(q => q.Id < curQuestionId).OrderBy(p=>p.Id).LastOrDefault();
             PersonQuestionAnswerView personQuestionAnswerView = PersonQuestionAnswerView.FromQuestion(question);
             return personQuestionAnswerView;
         }
@@ -251,5 +262,14 @@ namespace TestingQuestions.BLL.Services
 
         public bool IsFirstQuestion(int questionId)
         => questionId.Equals(Database.QuestionRepository.GetAll().Min(q => q.Id));
+
+        public int? GetAnswerNum(int testId, int questionId)
+        =>   Database.TestQuestionAnswerRepository.Get(qa => qa.TestResultId.Equals(testId) && qa.QuestionId.Equals(questionId)).FirstOrDefault()?.AnswerNum;
+
+        public PersonQuestionAnswerView GetQuestionByNum(int num)
+        => PersonQuestionAnswerView.FromQuestion(Database.QuestionRepository.GetAll().OrderBy(q=>q.Id).Skip(num - 1).Take(1).FirstOrDefault());
+
+        public int GetQuestionCount()
+        => Database.QuestionRepository.GetAll().Count();
     }
 }

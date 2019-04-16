@@ -2,21 +2,12 @@
 @{
     ViewBag.Title = "StartTest";
 }
-@section scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#startBtn').click(function (e) {
-                $('#startedAt').val(new Date());
-                return true;
-            });
-        });
-    </script>
-    }
+
 <h2>Начать тест</h2>
 
 <p>Тест состоит из 5 вопросов с 3 вариантами, ответа. Из них только 1 верный. Вопрос можно пропустить и ответить на него позднее</p>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("StartTestAsync", "Home", FormMethod.Post))
 {
     <input type="hidden" id="startedAt"/>
     <input type="submit" class="btn btn-warning" value="Начать тест" id="startBtn"/>
