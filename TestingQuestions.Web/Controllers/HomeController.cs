@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity.Owin;
 using TestingQuestions.BLL;
 using TestingQuestions.BLL.Interfaces;
 using TestingQuestions.BLL.ViewModels;
@@ -12,17 +13,13 @@ namespace TestingQuestions.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private ITestService testService;
-        private IPersonService personService;
+        private ITestService testService=> HttpContext.GetOwinContext().Get<ITestService>();
+        private IPersonService personService=> HttpContext.GetOwinContext().Get<IPersonService>();
 
-        private readonly int questionCount;
 
         public HomeController()
         {
-            testService = ServiceFactory.TestService;
-            personService = ServiceFactory.PersonService;
-
-            questionCount = testService.GetQuestionCount();
+            
         }
         public ActionResult Index()
         {
@@ -75,36 +72,7 @@ namespace TestingQuestions.Web.Controllers
             
         }
 
-        //public ActionResult DisplayNextQuestion(int curQuestionId)
-        //{
-        //    bool isLast = testService.IsLastQuestion(curQuestionId);
-        //    if (isLast)
-        //    {
-        //        return RedirectToAction(nameof(this.DisplayTestResults));
-        //    }
-        //    else
-        //    {
-        //        PersonQuestionAnswerView personQuestion = testService.GetNextQuestion(curQuestionId);
-        //        personQuestion.IsLast = testService.IsLastQuestion(personQuestion.QuestionId);
-        //        personQuestion.IsFirst = testService.IsFirstQuestion(personQuestion.QuestionId);
-        //        int testId = (int)Session[nameof(testId)];
-        //        ViewBag.qCount = questionCount;
-        //        personQuestion.AnswerNum = testService.GetAnswerNum(testId, personQuestion.QuestionId).GetValueOrDefault();
-        //        return View("DisplayQuestion", personQuestion);
-        //    }
-            
-        //}
-
-        //public ActionResult DisplayPrevQuestion(int curQuestionId)
-        //{
-        //    PersonQuestionAnswerView personQuestion = testService.GetPrevQuestion(curQuestionId);
-        //    personQuestion.IsLast = testService.IsLastQuestion(personQuestion.QuestionId);
-        //    personQuestion.IsFirst = testService.IsFirstQuestion(personQuestion.QuestionId);
-        //    int testId = (int)Session[nameof(testId)];
-        //    ViewBag.qCount = questionCount;
-        //    personQuestion.AnswerNum = testService.GetAnswerNum(testId, personQuestion.QuestionId).GetValueOrDefault();
-        //    return View("DisplayQuestion", personQuestion);
-        //}
+       
 
         [HttpPost]
         public async Task<string> SaveQuestionAsnwer(PersonQuestionAnswerView personQuestionAnswer)
@@ -141,6 +109,7 @@ namespace TestingQuestions.Web.Controllers
 
         public ActionResult DisplayQuestionByNum(int num)
         {
+            int questionCount = testService.GetQuestionCount();
             bool isLast = num>questionCount;
             if (isLast)
             {

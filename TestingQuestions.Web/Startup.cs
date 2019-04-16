@@ -12,7 +12,7 @@ namespace TestingQuestions.Web
 {
     public class Startup
     {
-        private string connectionName = "DefaultConnection";
+        private readonly string connectionName = "DefaultConnection";
         private IServiceCreator serviceCreator = new ServiceCreator();
         private ITestService CreateTestService() => serviceCreator.CreateTestService(connectionName);
         private IPersonService CreatePersonService() => serviceCreator.CreatePersonService(connectionName);
@@ -20,7 +20,9 @@ namespace TestingQuestions.Web
         public void Configuration(IAppBuilder app)
         {
             // Дополнительные сведения о настройке приложения см. на странице https://go.microsoft.com/fwlink/?LinkID=316888
-            ServiceFactory.ServiceInvoker = new ServiceInvoker(CreateTestService, CreatePersonService);
+            //ServiceFactory.ServiceInvoker = new ServiceInvoker(CreateTestService, CreatePersonService);
+            app.CreatePerOwinContext<ITestService>(CreateTestService);
+            app.CreatePerOwinContext<IPersonService>(CreatePersonService);
         }       
     }
 }
